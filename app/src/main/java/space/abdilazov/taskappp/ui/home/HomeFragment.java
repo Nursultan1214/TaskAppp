@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import space.abdilazov.taskappp.App;
 import space.abdilazov.taskappp.R;
 import space.abdilazov.taskappp.databinding.FragmentHomeBinding;
 import space.abdilazov.taskappp.models.News;
@@ -27,23 +28,32 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         adapter = new NewsAdapter();
+//        adapter.addItems(App.getInstance().getDatabase().newsDao().getAll());
         adapter.setOnClick(new NewsAdapter.OnClick() {
             @Override
             public void onLongClick(int position) {
-               AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
-               alert.setTitle("Внимание!").setMessage("Вы точно хотите удалить текст?");
-               alert.setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialog, int which) {
-                     adapter.removeItem(position);
-                   }
-               }).setNegativeButton("Нет", new DialogInterface.OnClickListener() {
-                   @Override
-                   public void onClick(DialogInterface dialog, int which) {
-                       dialog.dismiss();
-                   }
-               }).show();
+                AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
+                alert.setTitle("Внимание!").setMessage("Вы точно хотите удалить текст?");
+                alert.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        News news = adapter.getItem(position);
+//                        App.getInstance().getDatabase().newsDao().delete(news);
+                        adapter.removeItem(position);
+                    }
+                }).setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+            }
+
+            @Override
+            public void onClick(int pos) {
+
             }
         });
     }

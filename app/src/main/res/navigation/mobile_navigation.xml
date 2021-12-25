@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/boardFragment">
+    app:startDestination="@+id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="space.abdilazov.taskappp.NewsFragment"
+        android:name="space.abdilazov.taskappp.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_news" />
     <fragment

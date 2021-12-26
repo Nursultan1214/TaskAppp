@@ -1,6 +1,9 @@
 package space.abdilazov.taskappp.ui.addFragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,10 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import java.util.Objects;
 
+import space.abdilazov.taskappp.App;
 import space.abdilazov.taskappp.R;
 import space.abdilazov.taskappp.databinding.FragmentAddBinding;
 import space.abdilazov.taskappp.models.News;
@@ -19,9 +21,10 @@ import space.abdilazov.taskappp.models.News;
 public class AddFragment extends Fragment {
 
     private FragmentAddBinding binding;
+    private News news;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAddBinding.inflate(inflater);
         return binding.getRoot();
@@ -30,19 +33,26 @@ public class AddFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull  View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.sendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             save();
-            }
-        });
+        news = (News) requireArguments().getSerializable("news");
+        if (news != null){
+            binding.Et.setText(news.getTitle());
+        }
+        binding.sendBtn.setOnClickListener(v -> save());
     }
     private void save() {
-        String text = binding.Et.getText().toString();
-        News news = new News(text,System.currentTimeMillis());
+        String text = Objects.requireNonNull(binding.Et.getText()).toString();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("news",news);
-        getParentFragmentManager().setFragmentResult("rk_news",bundle);
+        if (news == null) {
+            news = new News(text, System.currentTimeMillis());
+            bundle.putSerializable("news", news);
+            getParentFragmentManager().setFragmentResult("rk_news", bundle);
+            App.getInstance().getDatabase().newsDao().insert(news);
+        } else {
+            news.setTitle(text);
+            bundle.putSerializable("news", news);
+            getParentFragmentManager().setFragmentResult("rk_news_update", bundle);
+            App.getInstance().getDatabase().newsDao().update(news);
+        }
         close();
     }
 

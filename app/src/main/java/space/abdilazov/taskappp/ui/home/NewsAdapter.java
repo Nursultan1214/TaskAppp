@@ -69,6 +69,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return list.get(pos);
     }
 
+    public void updateItem(News news) {
+        int index = list.indexOf(news);
+        list.set(index,news);
+        notifyItemChanged(index);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ItemBinding binding;

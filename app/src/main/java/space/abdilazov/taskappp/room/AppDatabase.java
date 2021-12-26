@@ -1,9 +1,9 @@
 package space.abdilazov.taskappp.room;
 
-import androidx.room.Database ;
+import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-import space.abdilazov.taskappp.models.News ;
+import space.abdilazov.taskappp.models.News;
 
 @Database(entities = {News.class},version = 1)
 public abstract class AppDatabase extends RoomDatabase {

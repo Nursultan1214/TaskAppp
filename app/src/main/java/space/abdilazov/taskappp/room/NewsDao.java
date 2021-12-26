@@ -13,8 +13,11 @@ import space.abdilazov.taskappp.models.News;
 @Dao
 public interface NewsDao {
 
-    @Query("SELECT * FROM news")
+    @Query("SELECT * FROM news order by createdAt DESC")
     List<News> getAll();
+
+    @Query("SELECT * FROM news order by title")
+    List<News> getSortedMethod();
 
     @Insert
     void insert(News news);
